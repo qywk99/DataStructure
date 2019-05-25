@@ -1,3 +1,20 @@
+// （1）按屏幕提示用前序方法建立一棵二叉树，并能按凹入法显二叉树结构。
+// （2）编写前序遍历、中序遍历、后序遍历，层次遍历程序。
+// （3）编写求二叉树的叶结点数，总结点数和深度和程序。
+// （4）设计一个选择式菜单，以菜单方式选择下列操作。
+//                           二 叉 树 子系 统
+//                   ***********************************
+//                   *      1－－－－建 二 叉 树       *
+//                   *      2－－－－凹 入 显 示       *
+//                   *      3－－－－先 序 遍 历       *
+//                   *      4－－－－中 序 遍 历       *
+//                   *      5－－－－后 序 遍 历       *
+//                   *      6－－－－层 次 遍 历       *
+//                   *      7－－－－求 叶 子 数       *
+//                   *      8－－－－求 结 点 数       *
+//                   *      9－－－－求 树 深 度       *
+//                   *      0－－－－返       回       *
+//                  ***********************************
 #include <iostream>
 #include <malloc.h>
 using namespace std;
@@ -22,7 +39,7 @@ typedef struct
 } LinkQueue;
 
 
-//ǰ�����������������
+//前序遍历建立二叉链表
 void InitBiTree(BiTree& T) {
 	cin >> ch;
 	if (ch == '#')
@@ -34,24 +51,24 @@ void InitBiTree(BiTree& T) {
 		InitBiTree(T->rchild);
 	}
 }
-//����������
+//遍历二叉树
 void TraverseBiTree(BiTree T, int number) {
 	if (T) {
-		if (number == 0) cout << T->data << " ";//�������
+		if (number == 0) cout << T->data << " ";//先序遍历
 		TraverseBiTree(T->lchild, number);
-		if (number == 1) cout << T->data << " ";//�������
+		if (number == 1) cout << T->data << " ";//中序遍历
 		TraverseBiTree(T->rchild, number);
-		if (number == 2) cout << T->data << " ";//�������
+		if (number == 2) cout << T->data << " ";//后序遍历
 	}
 }
-//�ڵ���
+//节点数
 int NodeCout(BiTree T) {
 	if (T)
 		return NodeCout(T->lchild) + NodeCout(T->rchild) + 1;
 	else
 		return 0;
 }
-//Ҷ�ӽڵ���
+//叶子节点数
 int LeafNodeCout(BiTree T) {
 	if (T) {
 		if (T->lchild or T->rchild) {
@@ -64,7 +81,7 @@ int LeafNodeCout(BiTree T) {
 		return 0;
 }
 
-//������ʾ��
+//凹入显示；
 void Dent(BiTree T, int depth) {
 	int i;
 	if (T) {
@@ -77,7 +94,7 @@ void Dent(BiTree T, int depth) {
 	}
 }
 
-//��ʼ������
+//初始化队列
 int InitQueue(LinkQueue *Q ) {
     Q->front=(LinkQueueNode * )malloc(sizeof(LinkQueueNode));
     if(Q->front != NULL){
@@ -85,9 +102,9 @@ int InitQueue(LinkQueue *Q ) {
         Q->front->next=NULL;
         return 1;
     }
-    else return 0;//���
+    else return 0;//溢出
 }
-//Ԫ��x�������� β�巨
+//元素x入链队列 尾插法
 int EnterQueue(LinkQueue *Q,QueueElementType x) {
     LinkQueueNode * newnode;
     newnode=(LinkQueueNode *) malloc(sizeof(LinkQueueNode));
@@ -102,7 +119,7 @@ int EnterQueue(LinkQueue *Q,QueueElementType x) {
     else
 		return 0;
 }
-//�����г��� �ӿ�ʼ��ͷ��ʼȡ
+//链队列出队 从开始的头开始取
 int DeleteQueue(LinkQueue *Q,QueueElementType *x ) {
     LinkQueueNode *p;
     if(Q->front==Q->rear)
@@ -110,12 +127,12 @@ int DeleteQueue(LinkQueue *Q,QueueElementType *x ) {
     p=Q->front->next;
     Q->front->next=p->next;
     if(Q->rear==p )
-         Q->rear=Q->front;  //���ȥ�����p�󣬶���Ϊ�� ��Ҫ���ǽ������ÿ�
+         Q->rear=Q->front;  //如果去掉结点p后，队列为空 不要忘记将队列置空
     *x=p->data;
     free(p);
     return 1;
 }
-//��α���
+//层次遍历
 int LevelOrderTraverse(BiTree  T) {
 	LinkQueue  Q;
     BiTree p;
@@ -134,7 +151,7 @@ int LevelOrderTraverse(BiTree  T) {
     return 1;
 
 }
-//���������
+//二叉树深度
 int Depth(BiTree T) {
 	if (T) {
 		m = Depth(T->lchild);
@@ -144,14 +161,14 @@ int Depth(BiTree T) {
 	else
 		return 0;
 }
-//����չʾ
+//功能展示
 void ShowFuntion() {
-	cout << "\t\t\t\t�� �� �� �� ϵ ͳ" << endl;
+	cout << "\t\t\t\t二 叉 树 子 系 统" << endl;
 	cout << "***************************************************************************" << endl;
-	cout << "1.��������\t2.������ʾ\t3.�������\t4.�������\t5.�������" << endl;
-	cout << "6.��α���\t7.��Ҷ����\t8.��ڵ���\t9.�������\t0.��    ��" << endl;
+	cout << "1.建二叉树\t2.凹入显示\t3.先序遍历\t4.中序遍历\t5.后序遍历" << endl;
+	cout << "6.层次遍历\t7.求叶子数\t8.求节点数\t9.求树深度\t0.返    回" << endl;
 	cout << "***************************************************************************" << endl;
-	cout << "��ѡ����Ӧ�Ĺ�����ţ�";
+	cout << "请选择相应的功能序号：";
 }
 int main() {
 	int j;
@@ -162,43 +179,43 @@ int main() {
 		cout << endl;
 		switch (j) {
 		case 1:
-			cout<<"ǰ�������������������'#'��ʾ�գ�"<<endl;
+			cout<<"前序遍历建立二叉树，以'#'表示空："<<endl;
 			InitBiTree(Tree);
 			break;
 		case 2:
-			cout<<"������ʾ"<<endl;
+			cout<<"凹入显示"<<endl;
 			Dent(Tree, Depth(Tree));
 			break;
 		case 3:
-			cout << endl << "�������:";
+			cout << endl << "先序遍历:";
 			TraverseBiTree(Tree, 0);
 			cout<<endl;
 			break;
 		case 4:
-			cout << endl << "�������:";
+			cout << endl << "中序遍历:";
 			TraverseBiTree(Tree, 1);
 			cout<<endl;
 			break;
 		case 5:
-			cout << endl << "�������:";
+			cout << endl << "后序遍历:";
 			TraverseBiTree(Tree, 2);
 			cout<<endl;
 			break;
 		case 6:
-			cout << "��α���" ;
+			cout << "层次遍历" ;
 			LevelOrderTraverse(Tree);
 			cout<<endl;
 			break;
 		case 7:
-			cout << "Ҷ�ӽڵ�����";
+			cout << "叶子节点数：";
 			cout<<LeafNodeCout(Tree)<<endl;
 			break;
 		case 8:
-			cout << "�ڵ�����";
+			cout << "节点数：";
 			cout<<NodeCout(Tree)<<endl;
 			break;
 		case 9:
-			cout << "��������ȣ�";
+			cout << "二叉树深度：";
 			cout<<Depth(Tree)<<endl;
 			break;
 		case 0:return 0;
