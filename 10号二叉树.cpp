@@ -17,6 +17,7 @@
 //                  ***********************************
 #include <iostream>
 #include <malloc.h>
+#include<queue>
 using namespace std;
 char ch;
 int m, n;
@@ -24,20 +25,6 @@ typedef struct BiTNode {
 	char data;
 	struct BiTNode* lchild, * rchild;
 }BiTNode, * BiTree;
-
-typedef BiTree QueueElementType;
-typedef struct Node
-{
-    QueueElementType data;
-    struct Node  *next;
-} LinkQueueNode;
-
-typedef struct
-{
-    LinkQueueNode *front; 
-    LinkQueueNode *rear;
-} LinkQueue;
-
 
 //前序遍历建立二叉链表
 void InitBiTree(BiTree& T) {
@@ -94,62 +81,21 @@ void Dent(BiTree T, int depth) {
 	}
 }
 
-//初始化队列
-int InitQueue(LinkQueue *Q ) {
-    Q->front=(LinkQueueNode * )malloc(sizeof(LinkQueueNode));
-    if(Q->front != NULL){
-        Q->rear=Q->front;
-        Q->front->next=NULL;
-        return 1;
-    }
-    else return 0;//溢出
-}
-//元素x入链队列 尾插法
-int EnterQueue(LinkQueue *Q,QueueElementType x) {
-    LinkQueueNode * newnode;
-    newnode=(LinkQueueNode *) malloc(sizeof(LinkQueueNode));
-    if(newnode != NULL){
-
-        newnode->data=x;
-        newnode->next=NULL;
-        Q->rear->next=newnode;
-        Q->rear=newnode;
-        return 1;
-    }
-    else
-		return 0;
-}
-//链队列出队 从开始的头开始取
-int DeleteQueue(LinkQueue *Q,QueueElementType *x ) {
-    LinkQueueNode *p;
-    if(Q->front==Q->rear)
-        return 0;
-    p=Q->front->next;
-    Q->front->next=p->next;
-    if(Q->rear==p )
-         Q->rear=Q->front;  //如果去掉结点p后，队列为空 不要忘记将队列置空
-    *x=p->data;
-    free(p);
-    return 1;
-}
 //层次遍历
-int LevelOrderTraverse(BiTree  T) {
-	LinkQueue  Q;
-    BiTree p;
-    InitQueue(&Q);
-    if(T==NULL)
-		return 0;
-    EnterQueue(&Q,T);
-    while(Q.front!=Q.rear){
-        if(DeleteQueue(&Q,&p));
-            cout<<p->data;
-        if(p->lchild)
-			EnterQueue(&Q,p->lchild);
-        if(p->rchild)
-			EnterQueue(&Q,p->rchild);
-    }
-    return 1;
-
+void LevelOrderTraverse(BiTree  T) {
+	BiTree p = T;
+	queue<BiTree> Q;
+	Q.push(p);
+	while (!Q.empty())
+	{
+		p = Q.front();
+		Q.pop();
+		cout << p->data << " ";
+		if (p->lchild != NULL)
+			Q.push(p->lchild);
+		if (p->rchild != NULL)
+			Q.push(p->rchild);
+	}
 }
 //二叉树深度
 int Depth(BiTree T) {
